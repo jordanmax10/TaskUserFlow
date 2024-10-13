@@ -1,0 +1,14 @@
+#Sirve para redirigir todas las peticiones a index.php
+RewriteEngine On
+
+# Si la petición no es un directorio
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Si la petición no es un archivo
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Si la petición no es un enlace simbólico
+RewriteCond %{REQUEST_FILENAME} !-l
+
+# Entonces redirigir a index.php
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
