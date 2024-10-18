@@ -1,11 +1,13 @@
 <?php
 
+require_once 'config.php';
+
 class Conexion{
 
-    private $host = 'localhost';
-    private $dbname ='db_gestion_usuarios';
-    private $user = 'root';
-    private $pass = '';
+    private $host = DB_HOST;
+    private $dbname = DB_NAME;
+    private $user = DB_USER;
+    private $pass = DB_PASSWORD;
 
     public function conectar()  {
         try {
@@ -20,6 +22,7 @@ class Conexion{
             return $conn;
         } catch (PDOException $e) {
             echo "Error en la Conexion".$e->getMessage();
+            error_log('CONEXION::conectar->PDOException' . $e->getMessage());
         }    
     }
 }

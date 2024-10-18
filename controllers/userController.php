@@ -23,12 +23,16 @@ class UserController
         // error_log('Parsed URL: ' . print_r($url, true));
 
         switch ($action) {
+
+                //------------------------------------ 
             case 'create':
                 $this->create();
                 break;
             case 'store':
                 $this->store();
                 break;
+
+                //------------------------------------ 
             case 'edit':
                 if (isset($url[2]) && is_numeric($url[2])) {
                     $this->user->setId((int) $url[2]);
@@ -38,6 +42,11 @@ class UserController
                     echo "No user ID specified for editing.";
                 }
                 break;
+
+            case 'update':
+                $this->update();
+                break;
+                //------------------------------------ 
             case 'delete':
                 if (isset($url[2]) && is_numeric($url[2])) {
                     $this->user->setId((int) $url[2]);
@@ -47,12 +56,11 @@ class UserController
                     echo "No user ID specified for deletion.";
                 }
                 break;
-            case 'update':
-                $this->update();
-                break;
+                //------------------------------------ 
             case 'show':
                 $this->show();
                 break;
+                //------------------------------------ 
             case 'index':
             default:
                 $this->index();
@@ -64,8 +72,7 @@ class UserController
 
     public function index()
     {
-        $userModel = new UserModel();
-        $users = $userModel->getAll();
+        $users = $this->user->getAllUser();
         // error_log(print_r($users, true));
 
         // Renderizar la vista y pasar la lista de usuarios
@@ -91,7 +98,7 @@ class UserController
             $this->user->setRole($_POST['role']);
             $this->user->setPhoto($_POST['photo']);
 
-            if ($this->user->save()) {
+            if ($this->user->saveUser()) {
                 header('Location: /TaskUserFlow/user');
                 exit();
             } else {
@@ -106,15 +113,21 @@ class UserController
 
     public function show()
     {
-        // Manejar la lógica para mostrar el usuario
-        $this->render('user/show');
+        // $user = $this->user->getId();
+
+        $user = $this->user->getUser(); // Obtiene el usuario por ID
+        if ($user) {
+            $this->render('user/show', ['user' => $user]);
+        } else {
+            echo "Usuario no encontrado.";
+        }
     }
 
     public function edit()
     {
         $userId = $this->user->getId();
 
-        $user = $this->user->get();
+        $user = $this->user->getUser();
 
         if ($user) {
             $this->render('user/edit', ['user' => $user]);
@@ -126,23 +139,38 @@ class UserController
 
     public function update()
     {
-        echo "
-        <script>
-            alert('Actualizando usuario');
-            </script>";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->user->setUsername($_POST['username']);
+            $this->user->setPassword($_POST['password']);
+            $this->user->setName($_POST['name']);
+            $this->user->setRole($_POST['role']);
+            $this->user->setPhoto($_POST['photo']);
+            $this->user->setId($_POST['id']);
+
+            if ($this->user->updateUser()) {
+                header('Location: /TaskUserFlow/user');
+                exit();
+            } else {
+                echo "
+                <script>
+                    alert('Error al actualizar el usuario');
+                </script>";
+                error_log('Error al actualizar el usuario');
+            }
+        }
     }
 
     public function delete()
     {
         $userId = $this->user->getId();
 
-        error_log('USERMODEL::delete->ID: ' . $userId);
+        // error_log('USERMODEL::delete->ID: ' . $userId);
 
         if ($userId === null || $userId === 0) {
             error_log('USERMODEL::delete->ID is not set or is invalid');
             return;
         } else {
-            if ($this->user->delete()) {
+            if ($this->user->deleteUser()) {
                 header('Location: /TaskUserFlow/user');
                 exit();
             } else {

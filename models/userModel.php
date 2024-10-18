@@ -1,9 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../libs/model.php';
-require_once './models/interface/IModel.php';
 
-class UserModel extends Model implements IModel
+class UserModel extends Model 
 {
 
     private $id;
@@ -12,6 +11,8 @@ class UserModel extends Model implements IModel
     private $name;
     private $role;
     private $photo;
+
+    protected $table ='users';
 
     public function __construct()
     {
@@ -26,108 +27,43 @@ class UserModel extends Model implements IModel
 
     // ------------------- CRUD -------------------
 
-    public function save()
+    public function saveUser()
     {
-        try {
-            $query = $this->prepare(
-                "INSERT INTO users(username, password, name, role, photo)
-                VALUES (:username, :password, :name, :role, :photo)"
-            );
-
-            $query->bindParam(':username', $this->username);
-            $query->bindParam(':password', password_hash($this->password, PASSWORD_DEFAULT));
-            $query->bindParam(':name', $this->name);
-            $query->bindParam(':role', $this->role);
-            $query->bindParam(':photo', $this->photo);
-
-            $result = $query->execute();
-        
-        if ($result) {
-            $this->id = $this->lastInsertId(); // Retrieve and set the ID after insertion
-        }
-        
-        return $result;
-        } catch (PDOException $e) {
-            error_log('USERMODEL::save->PDOException' . $e->getMessage());
-            return false;
-        }
+        $data = [
+            'username' => $this->username,
+            'password' => $this->password,
+            'name' => $this->name,
+            'role' => $this->role,
+            'photo' => $this->photo,
+        ];
+        return parent::save($this->table, $data);
     }
-    public function getAll()
+
+    public function getAllUser()
     {
-        $items = [];
-        try {
-            $query = $this->query("SELECT * FROM users");
-            $results = $query->fetchAll(PDO::FETCH_ASSOC); 
-
-            // Log para depuración
-            // error_log(print_r($results, true)); 
-
-            foreach ($results as $result) {
-                $user = new UserModel(); 
-                $items[] = $user->from($result); 
-            }
-
-            // Log para verificar el contenido de $items
-            // error_log(print_r($items, true)); 
-
-            return $items; 
-
-        } catch (PDOException $e) {
-            error_log('USERMODEL::getAll->PDOException' . $e->getMessage());
-            return [];
-        }
+        return parent::getAll($this->table);
     }
 
 
-
-
-    public function get()
-    {
-        try {
-            $query = $this->prepare("SELECT * FROM users WHERE id = :id");
-            $query->bindParam(':id', $this->id);
-            $query->execute();
-
-            $user = $query->fetch(PDO::FETCH_ASSOC);
-
-            if ($user) {
-                return $this->from($user);
-            } else {
-                return null;
-            }
-        } catch (PDOException $e) {
-            error_log('USERMODEL::get->PDOException' . $e->getMessage());
-            return null;
-        }
+    public function getUser() {
+        return parent::get($this->table, $this->id); 
     }
-    public function delete()
+    
+    public function deleteUser()
     {
-        try {
-            $query = $this->prepare("DELETE FROM users WHERE id = :id");
-            $query->bindParam(':id', $this->id);
-            return $query->execute();
-        } catch (PDOException $e) {
-            error_log('USERMODEL::delete->PDOException' . $e->getMessage());
-            return false;
-        }
+        return parent::delete($this->table, $this->id);
     }
-    public function update()
+    public function updateUser()
     {
-        try {
-            $query = $this->prepare(
-                "UPDATE users SET username = :username, password = :password, name = :name, role = :role, photo = :photo WHERE id = :id"
-            );
-            $query->bindParam(':id', $this->id);
-            $query->bindParam(':username', $this->username);
-            $query->bindParam(':password', password_hash($this->password, PASSWORD_DEFAULT));
-            $query->bindParam(':name', $this->name);
-            $query->bindParam(':role', $this->role);
-            $query->bindParam(':photo', $this->photo);
-            return $query->execute();
-        } catch (PDOException $e) {
-            error_log('USERMODEL::update->PDOException' . $e->getMessage());
-            return false;
-        }
+        $data = [
+            'username' => $this->username,
+            'password' => password_hash($this->password, PASSWORD_DEFAULT),
+            'name' => $this->name,
+            'role' => $this->role,
+            'photo' => $this->photo
+        ];
+
+        return parent::update($this->table,$data ,$this->id);
     }
 
     // ------------------- ADDITIONAL FUNCTIONS -------------------
@@ -138,23 +74,10 @@ class UserModel extends Model implements IModel
     }
 
 
-    //Sirve para llenar los atributos de la clase con los datos que vienen de la base de datos
-    public function from($array)
-    {
-        $this->id = $array['id'];
-        $this->username = $array['username'];
-        $this->password = $array['password'];
-        $this->name = $array['name'];
-        $this->role = $array['role'];
-        $this->photo = $array['photo'];
-
-        return $this;
-    }
-
     public function exists(string $username)
     {
         try {
-            $query = $this->prepare('SELECT username FROM users WHERE username = :username');
+            $query = $this->prepare('SELECT username FROM {$this->table} WHERE username = :username');
             $query->bindParam(':username', $username);
             $query->execute();
 
@@ -206,7 +129,7 @@ class UserModel extends Model implements IModel
 
     public function setRole(string $role): void
     {
-        $this->role = $role;
+        $this->role = $role ?? 'user';
     }
 
     public function getPhoto(): string
