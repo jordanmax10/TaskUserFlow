@@ -58,7 +58,14 @@ class UserController
                 break;
                 //------------------------------------ 
             case 'show':
-                $this->show();
+                if (isset($url[2]) && is_numeric($url[2])) {
+                    $this->user->setId((int) $url[2]);
+                    $this->show();
+                } else {
+                    error_log('USERMODEL::handleRequest->ID not provided in URL');
+                    echo "No user ID specified for editing.";
+                }
+                break;
                 break;
                 //------------------------------------ 
             case 'index':
@@ -89,8 +96,9 @@ class UserController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($this->user->exists($_POST['username'])) {
+                http_response_code(409);
                 echo 'El usuario ya existe';
-                return;
+                return false;
             }
             $this->user->setUsername($_POST['username']);
             $this->user->setPassword($_POST['password']);
@@ -99,15 +107,20 @@ class UserController
             $this->user->setPhoto($_POST['photo']);
 
             if ($this->user->saveUser()) {
+                http_response_code(201); // Created
                 header('Location: /TaskUserFlow/user');
                 exit();
             } else {
+                http_response_code(500); // Internal Server Error
                 echo "
                 <script>
                     alert('Error al guardar el usuario');
                 </script>";
                 error_log('Error al guardar el usuario');
             }
+        }else{
+            http_response_code(405); // Method Not Allowed
+            echo 'Método no permitido';
         }
     }
 
@@ -119,20 +132,22 @@ class UserController
         if ($user) {
             $this->render('user/show', ['user' => $user]);
         } else {
+            http_response_code(404); // Not Found
             echo "Usuario no encontrado.";
         }
     }
 
     public function edit()
     {
-        $userId = $this->user->getId();
+        // $userId = $this->user->getId();
 
         $user = $this->user->getUser();
 
         if ($user) {
             $this->render('user/edit', ['user' => $user]);
         } else {
-            error_log('Usuario no encontrado para ID: ' . $userId);
+            http_response_code(404); // Not Found
+            // error_log('Usuario no encontrado para ID: ' . $userId);
             echo "Usuario NO Encontrado";
         }
     }
@@ -148,15 +163,20 @@ class UserController
             $this->user->setId($_POST['id']);
 
             if ($this->user->updateUser()) {
+                http_response_code(200); // OK
                 header('Location: /TaskUserFlow/user');
                 exit();
             } else {
+                http_response_code(500); // Internal Server Error
                 echo "
                 <script>
                     alert('Error al actualizar el usuario');
                 </script>";
                 error_log('Error al actualizar el usuario');
             }
+        }else{
+            http_response_code(405); // Method Not Allowed
+            echo 'Método no permitido';
         }
     }
 
@@ -167,13 +187,16 @@ class UserController
         // error_log('USERMODEL::delete->ID: ' . $userId);
 
         if ($userId === null || $userId === 0) {
+            http_response_code(400); // Bad Request
             error_log('USERMODEL::delete->ID is not set or is invalid');
             return;
         } else {
             if ($this->user->deleteUser()) {
+                http_response_code(200); // OK
                 header('Location: /TaskUserFlow/user');
                 exit();
             } else {
+                http_response_code(500); // Internal Server Error
                 echo "
             <script>
                 alert('Error al eliminar el usuario');
@@ -193,7 +216,7 @@ class UserController
             extract($data);
             require_once $filePath;
         } else {
-            http_response_code(404);
+            http_response_code(404); //Not Found
             echo 'Página no encontrada';
         }
     }

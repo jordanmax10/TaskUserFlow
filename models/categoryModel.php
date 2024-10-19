@@ -1,130 +1,83 @@
 <?php
 
 require_once __DIR__ . '/../libs/model.php';
-require_once './models/interface/IModel.php';
 
-class CategoryModel extends Model implements IModel
+
+class CategoryModel extends Model 
 {
     private $id;
     private $name;
     private $color;
 
+    private $table = 'categories';
+
 
     public function __construct()
     {
         parent::__construct();
-        $this->id='';
-        $this->name='';
-        $this->color='';
+        $this->id = '';
+        $this->name = '';
+        $this->color = '';
     }
 
     // ------------------- CRUD -------------------
 
-    public function save() {
-        try {
-            $query = $this->prepare(
-                "INSERT INTO categories(name, color)
-                VALUES (:name, :color)"
-            );
-
-            $query->bindParam(':name',$this->name);
-            $query->bindParam(':color',$this->color);
-
-            if ($query->rowCount() > 0) return true;
-
-            return false;
-        } catch (PDOException $e) {
-            error_log('CATEGORMODEL::save->PDOException ' . $e);
-            return false;
-        }
+    public function saveCategory()
+    {
+        $data = [
+            'name' => $this->name,
+            'color' => $this->color
+        ];
+        return parent::save($this->table, $data);
     }
-    public function getAll() {
-        $items =[];
 
-        try {
-            $query = $this->prepare("SELECT * FROM categories");
-            $results = $query->fetchAll(PDO::FETCH_ASSOC);
-
-            foreach($results as $result){
-                $category = new CategoryModel();
-                $items[] = $category->from($result);
-            }
-
-            return $items;
-        } catch (PDOException $e) {
-            error_log('CATEGORYMODEL::getAll->PDOException'.$e->getMessage());
-            return [];
-        }
+    public function getAllCategory()
+    {
+        $results = parent::getAll($this->table);
+        return array_map(fn($item) => (new self())->from($item), $results);
     }
-    public function get() {
-        try {
-            $query = $this->prepare(
-                "SELECT * FROM categories WHERE id = :id"
-            );
-            $query->bindParam(':id',$this->id);
-
-            $category = $query->fetch(PDO::FETCH_ASSOC);
-
-            if($category){
-                return $this->from($category);
-            }else{
-                return null;
-            }
-        } catch (PDOException $e) {
-            error_log('CATEGORYMODEL::get->PDOException ' . $e->getMessage());
-            return null;
-        }
+    public function getCategory()
+    {
+        $categoryData = parent::get($this->table, $this->id);
+        return $categoryData ? $this->from($categoryData) : [];
     }
-    public function delete() {
-        try {
-            $query = $this->prepare(
-                "DELETE FROM categories WHERE id = :id"
-            );
-            $query->bindParam(':id',$this->id);
-            return $query->execute();
-        } catch (PDOException $e) {
-            error_log('CATEGORYMODEL::delete->PDOException' . $e->getMessage());
-            return false;
-        }
+    public function deleteCategory()
+    {
+        return parent::delete($this->table, $this->id);
     }
-    public function update() {
-        try {
-            $query = $this->prepare(
-                "UPDATE categories SET name = :name, color = :color
-                WHERE id = :id"
-            );
-            $query->bindParam(':name', $this->name);
-            $query->bindParam('color',$this->color);
-
-            return $query->execute();
-        } catch (PDOException $e) {
-            error_log('CATEGORYMODEL::update->PDOException ' . $e->getMessage());
-            return false;
-        }
+    public function updateCategory()
+    {
+        $data = [
+            'name' => $this->name,
+            'color' => $this->color
+        ];
+        return parent::update($this->table, $data ,$this->id);
     }
 
     // ------------------- ADDITIONAL FUNCTIONS -------------------
-    
+
     //Sirve para llenar los atributos de la clase con los datos que vienen de la base de datos
-    public function from($array)  {
+    public function from($array)
+    {
         $this->id = $array['id'];
-        $this->name =$array['name'];
-        $this->color =$array['color'];
+        $this->name = $array['name'];
+        $this->color = $array['color'];
 
         return $this;
     }
 
-    public function exists(string $name) {
+    public function exists(string $name)
+    {
         try {
             $query = $this->prepare(
                 'SELECT name FROM categories WHERE name = :name'
             );
-            $query->bindParam(':name',$name);
+            $query->bindParam(':name', $name);
             $query->execute();
 
             return $query->rowCount() > 0;
         } catch (PDOException $e) {
-            error_log('CATEGORYMODEL::exists->PDOException'.$e->getMessage());
+            error_log('CATEGORYMODEL::exists->PDOException' . $e->getMessage());
             return false;
         }
     }
@@ -132,27 +85,33 @@ class CategoryModel extends Model implements IModel
 
     // ------------------- GETTERS & SETTERS -------------------
 
-    public function getId() : int {
+    public function getId(): int
+    {
         return $this->id ?? 0;
     }
 
-    public function setId($id) : void {
+    public function setId($id): void
+    {
         $this->id = $id;
     }
 
-    public function getName() : string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-    public function setName(string $name) : void {
+    public function setName(string $name): void
+    {
         $this->name = $name;
     }
 
-    public function getColor() :string {
+    public function getColor(): string
+    {
         return $this->color;
     }
 
-    public function setColor(string $color) :void{
+    public function setColor(string $color): void
+    {
         $this->color = $color;
     }
 }

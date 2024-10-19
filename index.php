@@ -12,23 +12,32 @@ ini_set('error_log', 'C:\xampp\htdocs\TaskUserFlow\php-error.log');
 
 require_once './controllers/homeController.php';
 require_once './controllers/userController.php';
+require_once './controllers/categoryController.php';
 
 //-------------------- ROUTING --------------------
 
-$url = isset($_GET['url']) ? $_GET['url']: null;
-$url =rtrim($url,'/'); 
-$url=explode('/',$url);
+$url = isset($_GET['url']) ? $_GET['url'] : null;
+$url = rtrim($url, '/');
+$url = explode('/', $url);
 
 switch ($url[0]) {
     case '':
         (new HomeController())->index();
         break;
     case 'user':
-        $controller = new UserController();
+        $usercontroller = new UserController();
         if (isset($url[1])) {
-            $controller->handleRequest($url[1]); // Llama a la función correcta según el segmento de la URL
+            $usercontroller->handleRequest($url[1]); // Llama a la función correcta según el segmento de la URL
         } else {
-            $controller->handleRequest('index'); // Acción por defecto
+            $usercontroller->handleRequest('index'); // Acción por defecto
+        }
+        break;
+    case 'category':
+        $categoryController = new CategoryController();
+        if (isset($url[1])) {
+            $categoryController->handleRequest($url[1]);
+        } else {
+            $categoryController->handleRequest('index');
         }
         break;
     default:
@@ -36,4 +45,3 @@ switch ($url[0]) {
         echo 'Página no encontrada';
         break;
 }
-

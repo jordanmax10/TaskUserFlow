@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -26,11 +26,6 @@
             <?php if (!empty($users)): ?>
                 <?php foreach ($users as $user): ?>
                     <tr>
-                        <!-- <?php
-                                for ($i = 0; $i < 10; $i++) { ?>
-                        <td><?php echo htmlspecialchars($i); ?></td>
-                   <?php  }
-                    ?> -->
                         <td><?php echo htmlspecialchars($user->getId()); ?></td>
                         <td><?php echo htmlspecialchars($user->getUsername()); ?></td>
                         <td><?php echo htmlspecialchars($user->getName()); ?></td>
@@ -45,6 +40,7 @@
                         <td>
                             <a href="/TaskUserFlow/user/edit/<?php echo htmlspecialchars($user->getId()); ?>">Actualizar</a>
                             <a href="/TaskUserFlow/user/delete/<?php echo htmlspecialchars($user->getId()); ?>">Eliminar</a>
+                            <a href="/TaskUserFlow/user/show/<?php echo htmlspecialchars($user->getId())?>">Show</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
