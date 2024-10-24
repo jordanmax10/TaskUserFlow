@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../models/JoinTaskUserCategoryModel.php';
 require_once __DIR__ . '/../models/TaskModel.php';
+require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../models/CategoryModel.php';
 require_once __DIR__ . '/AuthController.php';
 
 class TaskController
@@ -9,12 +11,14 @@ class TaskController
     private $task;
     private $auth;
     private $user;
+    private $category;
 
     public function __construct()
     {
         $this->task = new TaskModel();
         $this->auth = new AuthController();
         $this->user = new UserModel();
+        $this->category = new CategoryModel();
         $this->auth->checkAuth(); // Verifica si el usuario está autenticado
     }
 
@@ -59,22 +63,22 @@ class TaskController
 
     public function index()
     {
-        $join = new JoinTaskUserCategoryModel();
+        $join = new JoinModel();
         $tasks = $join->getAll($this->user->getId());
         $this->render('tasks/index', ['tasks' => $tasks, 'user' => $this->user]);
     }
 
     public function create()
     {
-        $join = new JoinTaskUserCategoryModel();
-        $categories = $join->getCategoriesByUserId($this->user->getId());
+        $join = new JoinModel();
+        $categories = $this->category->getAllCategory();
         $this->render('tasks/create', ['categories' => $categories, 'user' => $this->user]);
     }
 
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->task->setDescripcion($_POST['descripcion']);
+            $this->task->setDescription($_POST['description']);
             $this->task->setStatus($_POST['status']);
             $this->task->setComment($_POST['comment']);
             $this->task->setIdUser($this->user->getId());
@@ -104,7 +108,7 @@ class TaskController
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->task->setDescripcion($_POST['descripcion']);
+            $this->task->setDescription($_POST['description']);
             $this->task->setStatus($_POST['status']);
             $this->task->setComment($_POST['comment']);
             $this->task->setIdUser($this->user->getId());

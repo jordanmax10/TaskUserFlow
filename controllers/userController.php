@@ -89,13 +89,11 @@ class UserController
 
     public function index()
     {
-        $users = $this->user->getAllUser();
-        $tasks = $this->task->getAllTask(); // O el método que uses para obtener tareas
-
-        // error_log(print_r($users, true));
+        $userId= $_SESSION['user_id'];
+        $tasks = $this->task->getTasksByUserId($userId); // Obtiene las tareas por ID de usuario
 
         // Renderizar la vista y pasar la lista de usuarios
-        $this->render('user/index', ['users' => $users, 'tasks' => $tasks]);
+        $this->render('user/index', ['tasks' => $tasks]);
 
     }
 
@@ -230,7 +228,7 @@ class UserController
             require_once $filePath;
         } else {
             http_response_code(404); //Not Found
-            echo 'Página no encontrada';
+            throw new Exception("La vista $view no se pudo encontrar.");
         }
     }
 }

@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Task</title>
+    <title>Crear Nueva Tarea</title>
+    <link rel="stylesheet" href="/public/css/style.css"> <!-- Estilos opcionales -->
 </head>
 <body>
     <h1>Crear Nueva Tarea</h1>
     <form method="POST" action="/TaskUserFlow/task/store">
-        <label for="descripcion">Descripción:</label>
-        <input type="text" name="descripcion" required>
-        
+        <label for="description">Descripción:</label>
+        <input type="text" name="description" required>
+
         <label for="status">Estado:</label>
-        <select name="status">
-            <option value="pendiente">Pendiente</option>
-            <option value="completada">Completada</option>
+        <select name="status" required>
+            <option value="pending">Pendiente</option>
+            <option value="in_progress">En Progreso</option>
+            <option value="completed">Completada</option>
         </select>
-        
+
         <label for="comment">Comentario:</label>
         <textarea name="comment"></textarea>
-        
+
+        <input type="hidden" name="id_user" value="<?= htmlspecialchars($user->getId()); ?>"> <!-- ID de usuario oculto -->
+
         <label for="id_category">Categoría:</label>
         <select name="id_category" required>
-            <?php if ($categories): ?>
+            <?php if ($categories && is_array($categories)): ?>
                 <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category->id; ?>"><?= $category->name; ?></option>
+                    <option value="<?= htmlspecialchars($category->getId()); ?>"><?= htmlspecialchars($category->getName()); ?></option>
                 <?php endforeach; ?>
             <?php else: ?>
                 <option value="">No hay categorías disponibles</option>

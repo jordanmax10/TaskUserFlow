@@ -3,37 +3,64 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tus Tareas</title>
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>
     <header>
-        <h1>Bienvenido, <?php echo $_SESSION['username']; ?></h1>
+        <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
         <nav>
-            <a href="/TaskUserFlow/user/create">Crear Tarea</a>
-            <a href="/TaskUserFlow/user/profile">Mi Perfil</a>
-            <a href="/TaskUserFlow/logout">Cerrar Sesión</a>
+            <ul>
+                <li><a href="/TaskUserFlow/task/create">Crear Tarea</a></li>
+                <li><a href="/TaskUserFlow/user/profile">Mi Perfil</a></li>
+                <li><a href="/TaskUserFlow/logout">Cerrar Sesión</a></li>
+            </ul>
         </nav>
     </header>
+    
     <main>
         <h2>Tus Tareas</h2>
-        <ul>
-
-            <?php if (isset($tasks) && is_array($tasks)): ?>
-                <?php foreach ($tasks as $task): ?>
-                    <li>
-                        <a href="/task/show/<?php echo htmlspecialchars($task['id']); ?>"><?php echo $task['title']; ?></a>
-                        <a href="/task/edit/<?php echo htmlspecialchars($task['id']); ?>">Editar</a>
-                        <a href="/task/delete/<?php echo htmlspecialchars($task['id']); ?>">Eliminar</a>
-                    </li>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No hay tareas disponibles.</p>
-            <?php endif; ?>
-
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Comentario</th>
+                    <th>ID Usuario</th>
+                    <th>ID Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($tasks) && is_array($tasks) && count($tasks) > 0): ?>
+                    <?php foreach ($tasks as $task): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($task->getDescription()); ?></td>
+                            <td><?php echo htmlspecialchars($task->getStatus()); ?></td>
+                            <td><?php echo htmlspecialchars($task->getComment()); ?></td>
+                            <td><?php echo htmlspecialchars($task->getIdUser()); ?></td>
+                            <td><?php echo htmlspecialchars($task->getIdCategory()); ?></td>
+                            <td>
+                                <a href="/task/edit/<?php echo htmlspecialchars($task->getId()); ?>">Editar</a>
+                                <a href="/task/delete/<?php echo htmlspecialchars($task->getId()); ?>" 
+                                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta tarea?');">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6">No hay tareas disponibles.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </main>
+
+    <footer>
+        <p>&copy; <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+    </footer>
 </body>
 
 </html>

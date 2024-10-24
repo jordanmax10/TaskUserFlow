@@ -34,7 +34,7 @@ switch ($url[0]) {
 
     case 'admin':
         $adminController = new AdminController();
-        $adminController->index();
+        $adminController->handleRequest($url[1] ?? 'index');
         break;
 
     case 'login':

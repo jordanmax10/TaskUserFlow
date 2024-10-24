@@ -5,7 +5,7 @@ require_once __DIR__ . '/../libs/model.php';
 class TaskModel extends Model
 {
     private $id;
-    private $descripcion;
+    private $description;
     private $status;
     private $comment;
     private $id_user;
@@ -17,7 +17,7 @@ class TaskModel extends Model
     {
         parent::__construct();
         $this->id = '';
-        $this->descripcion = '';
+        $this->description = '';
         $this->status = '';
         $this->comment = '';
         $this->id_user = '';
@@ -29,7 +29,7 @@ class TaskModel extends Model
     public function saveTask(): bool
     {
         $data = [
-            'descripcion' => $this->descripcion,
+            'description' => $this->description,
             'status' => $this->status,
             'comment' => $this->comment,
             'id_user' => $this->id_user,
@@ -59,7 +59,7 @@ class TaskModel extends Model
     public function updateTask(): bool
     {
         $data = [
-            'descripcion' => $this->descripcion,
+            'description' => $this->description,
             'status' => $this->status,
             'comment' => $this->comment,
             'id_user' => $this->id_user,
@@ -70,10 +70,10 @@ class TaskModel extends Model
 
     // ------------------- ADDITIONAL FUNCTIONS -------------------
     
-    public function from(array $data): self
+    public function from(array $data)
     {
         $this->id = $data['id'];
-        $this->descripcion = $data['descripcion'];
+        $this->description = $data['description'];
         $this->status = $data['status'];
         $this->comment = $data['comment'];
         $this->id_user = $data['id_user'];
@@ -82,7 +82,7 @@ class TaskModel extends Model
         return $this;
     }
 
-    public function getAllByUserId(int $userId): array
+    public function getTasksByUserId(int $userId): array
     {
         $items = [];
         try {
@@ -150,14 +150,14 @@ class TaskModel extends Model
         $this->id = $id;
     }
 
-    public function getDescripcion(): string
+    public function getDescription(): string
     {
-        return $this->descripcion;
+        return $this->description;
     }
 
-    public function setDescripcion(string $descripcion): void
+    public function setDescription(string $description): void
     {
-        $this->descripcion = $descripcion;
+        $this->description = $description;
     }
 
     public function getStatus(): string
