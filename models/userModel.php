@@ -64,7 +64,7 @@ class UserModel extends Model
     {
         $data = [
             'username' => $this->username,
-            'password' => password_hash($this->password, PASSWORD_DEFAULT),
+            'password' => $this->password,
             'name' => $this->name,
             'role' => $this->role,
             'photo' => $this->photo
@@ -79,6 +79,23 @@ class UserModel extends Model
     {
         return password_verify($password, $this->password);
     }
+    
+
+    // public function getByUsername(string $username)
+    // {
+    //     try {
+    //         $query = $this->prepare("SELECT * FROM {$this->table} WHERE username = :username");
+    //         $query->bindParam(':username', $username);
+    //         $query->execute();
+
+    //         $userData = $query->fetch(PDO::FETCH_ASSOC);
+
+    //         return $userData ? $this->from($userData) : null;
+    //     } catch (PDOException $e) {
+    //         error_log('USERMODEL::getByUsername->PDOException' . $e->getMessage());
+    //         return null;
+    //     }
+    // }
 
 
     public function exists(string $username)
@@ -95,7 +112,6 @@ class UserModel extends Model
         }
     }
 
-    // ------------------- FUNCION ADICIONAL -------------------
 
     public function from(array $data)
     {

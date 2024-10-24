@@ -1,15 +1,21 @@
 <?php
 
 require_once __DIR__ . '/../models/categoryModel.php';
+require_once __DIR__ . '/AuthController.php';
 
-class CategoryController
+
+class CategoryController 
 {
 
     private $category;
+    private $auth;
 
     public function __construct()
     {
         $this->category = new CategoryModel();
+        $this->auth = new AuthController();
+        $this->auth->checkAuth(); // Verifica si el usuario está autenticado
+
     }
 
     public function handleRequest($action)

@@ -57,11 +57,11 @@ class CategoryModel extends Model
     // ------------------- ADDITIONAL FUNCTIONS -------------------
 
     //Sirve para llenar los atributos de la clase con los datos que vienen de la base de datos
-    public function from($array)
+    public function from(array $data)
     {
-        $this->id = $array['id'];
-        $this->name = $array['name'];
-        $this->color = $array['color'];
+        $this->id = $data['id'];
+        $this->name = $data['name'];
+        $this->color = $data['color'];
 
         return $this;
     }

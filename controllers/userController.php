@@ -1,19 +1,29 @@
 <?php
 
 require_once __DIR__ . '/../models/userModel.php';
+require_once __DIR__ . '/../models/taskModel.php';
 
 class UserController
 {
 
     private $user;
+    private $auth;
+    private $task;
+
     public function __construct()
     {
+        $this->auth = new AuthController();
+        $this->auth->checkAuth(); // Verifica si el usuario está autenticado
         $this->user = new UserModel();
+        $this->task = new TaskModel();
     }
 
 
     public function handleRequest($action) //Handle significa manejar, request significa solicitud
     {
+
+        $this->auth->checkAuth(); // Verifica si el usuario está autenticado
+        
         $url = isset($_GET['url']) ? $_GET['url'] : null;
 
         $url = rtrim($url, '/');
@@ -80,10 +90,13 @@ class UserController
     public function index()
     {
         $users = $this->user->getAllUser();
+        $tasks = $this->task->getAllTask(); // O el método que uses para obtener tareas
+
         // error_log(print_r($users, true));
 
         // Renderizar la vista y pasar la lista de usuarios
-        $this->render('user/index', ['users' => $users]);
+        $this->render('user/index', ['users' => $users, 'tasks' => $tasks]);
+
     }
 
     public function create()
