@@ -81,22 +81,6 @@ class UserModel extends Model
     }
     
 
-    // public function getByUsername(string $username)
-    // {
-    //     try {
-    //         $query = $this->prepare("SELECT * FROM {$this->table} WHERE username = :username");
-    //         $query->bindParam(':username', $username);
-    //         $query->execute();
-
-    //         $userData = $query->fetch(PDO::FETCH_ASSOC);
-
-    //         return $userData ? $this->from($userData) : null;
-    //     } catch (PDOException $e) {
-    //         error_log('USERMODEL::getByUsername->PDOException' . $e->getMessage());
-    //         return null;
-    //     }
-    // }
-
 
     public function exists(string $username)
     {
@@ -181,7 +165,7 @@ class UserModel extends Model
 
     public function setRole(string $role): void
     {
-        $this->role = $role ?? 'user';
+        $this->role = $role;
     }
 
     public function getPhoto(): string

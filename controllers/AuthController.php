@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/authModel.php';
+require_once __DIR__ . '/../libs/controller.php';
 
-class AuthController
+class AuthController extends Controller
 {
     private $user;
     private $login;
@@ -29,7 +30,6 @@ class AuthController
 
     public function login()
     {
-        // No llamar a session_start aquí, ya se hace en index.php
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
@@ -40,22 +40,21 @@ class AuthController
                 $_SESSION['user_id'] = $userData->getId(); // Usa el método para obtener ID
                 $_SESSION['user_role'] = $userData->getRole(); // Usa el método para obtener rol
                 $_SESSION['username'] = $userData->getUsername();
-                header('Location:' . constant('URL') . 'user');
-                exit();
+                $this->redirectWithMessage('¡Inicio de sesión exitoso!', 'user', 'success');
             } else {
-                // Manejo de errores
-                echo "Credenciales incorrectas.";
+                $this->redirectWithMessage("Credenciales incorrectas.", 'login', 'error');
             }
         }
         $this->render('auth/login');
     }
 
-    public function register(){
+    public function register()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password'];
             $name = $_POST['name'];
-            $role = $_POST['role'];
+            $role = 'user';
             $photo = $_POST['photo'];
 
             $this->user->setUsername($username);
@@ -65,10 +64,9 @@ class AuthController
             $this->user->setPhoto($photo);
 
             if ($this->user->saveUser()) {
-                header('Location: ' . constant('URL') . 'login');
-                exit();
+                $this->redirectWithMessage("Registro exitoso. Ahora puedes iniciar sesión.", 'login', 'success');
             } else {
-                echo 'Error al registrar el usuario';
+                $this->redirectWithMessage("Error al registrar el usuario.", 'register', 'error');
             }
         }
         $this->render('auth/register');
@@ -79,10 +77,5 @@ class AuthController
         session_destroy();
         header('Location: ' . constant('URL') . 'login');
         exit();
-    }
-
-    private function render($view)
-    {
-        require_once __DIR__ . '/../views/' . $view . '.php';
     }
 }

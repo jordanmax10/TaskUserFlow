@@ -5,22 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
-    <link rel="stylesheet" href="<?php echo constant('URL')?>/public/css/style-admin.css">
+    <link rel="stylesheet" href="<?php echo constant('URL') ?>/public/css/style-admin.css">
 </head>
 
 <body>
+
+<!-- Mostrar mensajes de sesión -->
+<?php $this->showSessionMessages(); ?>
     <header>
+        <a href="<?php echo constant('URL') ?>admin/index" class="logo">
+            <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
+            <br><span>Task User Flow</span>
+        </a>
         <h1>Panel de Administración</h1>
         <nav>
             <ul>
-                <li><a href="/TaskUserFlow/logout">Cerrar Sesión</a></li>
+            <li><a href="<?php echo constant('URL') ?>user/create-task">Crear Tarea</a></li>
+            <li><a href="<?php echo constant('URL') ?>user/profile">Mi Perfil</a></li>
+            <li><a href="<?php echo constant('URL') ?>logout">Cerrar Sesión</a></li>    
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container">
         <h2>Bienvenido, Administrador</h2>
         <p>Desde aquí puedes gestionar usuarios, tareas y categorías.</p>
+        <br>
+        
+
 
         <section>
             <h3>Gestión de Usuarios</h3>

@@ -10,6 +10,7 @@ class TaskModel extends Model
     private $comment;
     private $id_user;
     private $id_category;
+    private $category_name;
 
     private $table = 'tasks';
 
@@ -22,6 +23,7 @@ class TaskModel extends Model
         $this->comment = '';
         $this->id_user = '';
         $this->id_category = '';
+        $this->category_name = ''; // Inicializar category_name
     }
 
     // ------------------- CRUD -------------------
@@ -39,7 +41,7 @@ class TaskModel extends Model
         return parent::save($this->table, $data);
     }
 
-    public function getAllTask(): array
+    public function getAllTasks(): array
     {
         $results = parent::getAll($this->table);
         return array_map(fn($item) => (new self())->from($item), $results);
@@ -69,15 +71,16 @@ class TaskModel extends Model
     }
 
     // ------------------- ADDITIONAL FUNCTIONS -------------------
-    
-    public function from(array $data)
+
+    public function from(array $data): self
     {
-        $this->id = $data['id'];
-        $this->description = $data['description'];
-        $this->status = $data['status'];
-        $this->comment = $data['comment'];
-        $this->id_user = $data['id_user'];
-        $this->id_category = $data['id_category'];
+        $this->id = $data['id'] ?? null;
+        $this->description = $data['description'] ?? '';
+        $this->status = $data['status'] ?? '';
+        $this->comment = $data['comment'] ?? '';
+        $this->id_user = $data['id_user'] ?? null;
+        $this->id_category = $data['id_category'] ?? null;
+        $this->category_name = $data['category_name'] ?? ''; 
 
         return $this;
     }
@@ -86,7 +89,12 @@ class TaskModel extends Model
     {
         $items = [];
         try {
-            $query = $this->prepare('SELECT * FROM ' . $this->table . ' WHERE id_user = :id_user');
+            $query = $this->prepare('
+                SELECT t.*, c.name AS category_name 
+                FROM ' . $this->table . ' t 
+                JOIN categories c ON t.id_category = c.id 
+                WHERE t.id_user = :id_user
+            ');
             $query->bindParam(':id_user', $userId, PDO::PARAM_INT);
             $query->execute();
 
@@ -98,8 +106,8 @@ class TaskModel extends Model
 
             return $items;
         } catch (PDOException $e) {
-            error_log('TaskModel::getAllByUserId->PDOException ' . $e);
-            return []; // Consider returning an empty array on error
+            error_log('TaskModel::getTasksByUserId->PDOException ' . $e);
+            return []; 
         }
     }
 
@@ -120,7 +128,7 @@ class TaskModel extends Model
             return $items;
         } catch (PDOException $e) {
             error_log('TaskModel::getAllByCategoryId->PDOException ' . $e);
-            return []; // Consider returning an empty array on error
+            return []; // Retorna un array vacío en caso de error
         }
     }
 
@@ -134,7 +142,7 @@ class TaskModel extends Model
             return (int)($query->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
         } catch (PDOException $e) {
             error_log('TaskModel::getCountByStatus->PDOException ' . $e);
-            return 0; // Return 0 on error
+            return 0; // Retorna 0 en caso de error
         }
     }
 
@@ -198,5 +206,10 @@ class TaskModel extends Model
     public function setIdCategory(int $id_category): void
     {
         $this->id_category = $id_category;
+    }
+
+    public function getCategoryName(): string
+    {
+        return $this->category_name; // Devuelve el nombre de la categoría
     }
 }

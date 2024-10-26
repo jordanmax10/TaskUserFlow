@@ -1,6 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../models/JoinTaskUserCategoryModel.php';
 require_once __DIR__ . '/../models/TaskModel.php';
 require_once __DIR__ . '/../models/UserModel.php';
 require_once __DIR__ . '/../models/CategoryModel.php';
@@ -63,14 +62,12 @@ class TaskController
 
     public function index()
     {
-        $join = new JoinModel();
-        $tasks = $join->getAll($this->user->getId());
+        $tasks = $this->task->getAllTask($this->user->getId());
         $this->render('tasks/index', ['tasks' => $tasks, 'user' => $this->user]);
     }
 
     public function create()
     {
-        $join = new JoinModel();
         $categories = $this->category->getAllCategory();
         $this->render('tasks/create', ['categories' => $categories, 'user' => $this->user]);
     }

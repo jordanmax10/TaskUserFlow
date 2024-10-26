@@ -38,7 +38,7 @@
                             <td><?php echo htmlspecialchars($user->getName()); ?></td>
                             <td><?php echo htmlspecialchars($user->getRole()); ?></td>
                             <td>
-                                <a href="/TaskUserFlow/user/edit/<?php echo htmlspecialchars($user->getId()); ?>">Editar</a>
+                                <a href="/TaskUserFlow/admin/edit/<?php echo htmlspecialchars($user->getId()); ?>">Editar</a>
                                 <a href="/TaskUserFlow/user/delete/<?php echo htmlspecialchars($user->getId()); ?>">Eliminar</a>
                             </td>
                         </tr>

@@ -1,0 +1,1 @@
+<p>&copy; <span>J-Max</span> <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
