@@ -15,7 +15,7 @@
     
     <div class="container">
         <h1>Register User</h1>
-        <form action="<?= constant('URL') ?>register" method="POST">
+        <form action="<?= constant('URL') ?>register" method="POST" enctype="multipart/form-data">
             <label for="username">Username</label>
             <input type="text" name="username" id="username" required>
             <br>
@@ -26,7 +26,7 @@
             <input type="text" name="name" id="name" required>
             <br>
             <label for="photo">Photo</label>
-            <input type="text" name="photo" id="photo">
+            <input type="file" name="photo" >
             <br>
             <button type="submit">Register</button>
         </form>

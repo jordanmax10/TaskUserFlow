@@ -15,7 +15,7 @@
     <header>
         <a href="<?php echo constant('URL') ?>user/index" class="logo">
             <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
-            <br><span>Task User Flow</span>
+            <span>Task User Flow</span>
         </a>
         <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
         <nav>
@@ -56,7 +56,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6">No hay tareas disponibles.</td>
+                        <td colspan="5">No hay tareas disponibles.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -64,7 +64,7 @@
     </main>
 
     <footer>
-        <?php require_once __DIR__ . '/../interfaces/footer.php';  ?>
+        <?php require_once __DIR__ . '/../interfaces/footer.php'; ?>
     </footer>
 </body>
 

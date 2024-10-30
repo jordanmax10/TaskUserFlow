@@ -24,7 +24,7 @@
 
             <br>
             <label for="password">New Password</label>
-            <input type="password" name="password" placeholder="Nueva Contraseña" required>
+            <input type="password" name="password" placeholder="Nueva Contraseña">
             <br>
             <label for="name">Nombre</label>
             <input type="text" name="name" id="name" value="<?= htmlspecialchars($user->getName()) ?>" required>

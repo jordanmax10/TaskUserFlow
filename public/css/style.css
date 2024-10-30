@@ -5,7 +5,14 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%; 
+  margin: 0; 
+}
+
 body {
+  display: flex;
+  flex-direction: column; 
   background-color: #f1f1f1;
 }
 
@@ -18,35 +25,40 @@ header {
   align-items: center;
   text-align: center;
 }
+
 ul {
   display: flex;
   justify-content: flex-end;
   list-style: none;
   margin: 0;
-  padding: 0; 
+  padding: 0;
   align-items: center;
 }
-a {
-  color: white;
+
+
+header a {
+  color: #fff;
   text-decoration: none;
 }
-.logo{
+
+.logo {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .logo a {
   font-size: 15px;
 }
-.logo img{
+
+.logo img {
   height: 50px;
   margin-right: 10px;
 }
 
-
 nav a {
   font-weight: 500;
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 nav a:hover {
@@ -59,40 +71,24 @@ h2 {
   padding: 1rem;
 }
 
-table {
-  width: 80%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th,
-td {
-  padding: 0.75rem;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-td a {
-  margin-right: 1rem;
-  color: #007bff;
-  text-decoration: none;
-}
-
-td a:hover {
-  text-decoration: underline;
-}
-
 .container {
+  flex: 1;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin:15px auto;
+}
+
+.profile-picture {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }
 
 form {
@@ -114,7 +110,6 @@ textarea {
   border-radius: 5px;
 }
 
-
 form button {
   width: 100%;
   padding: 0.5rem;
@@ -129,16 +124,17 @@ form button:hover {
   background-color: #0056b3;
 }
 
-form a {
-  text-align: center;
-  display: block;
-  margin-top: 1rem;
-  color: #007bff;
-  text-decoration: none;
+form input[type="submit"] {
+  padding: 10px;
+  background: #07a1ac;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-form a:hover {
-  text-decoration: underline;
+form input[type="submit"]:hover {
+  background: #0056b3;
 }
 
 .alert {
@@ -159,13 +155,24 @@ form a:hover {
   border: 1px solid #f5c6cb;
 }
 
+.delete-account {
+  color: red;
+  text-decoration: none;
+  display: block;
+  margin-top: 20px;
+}
+
+.delete-account:hover {
+  text-decoration: underline;
+}
+
+
+
 footer {
   text-align: center;
-  padding: 10px;
+  padding: 20px;
   background: #007bff;
   color: white;
-  position: fixed;
-  bottom: 0;
   width: 100%;
 }
 
@@ -176,9 +183,10 @@ footer {
     text-align: center;
   }
 
-  .logo  a {
+  .logo a {
     font-size: 20px;
   }
+
   h1 {
     font-size: 20px;
     font-weight: normal;
@@ -190,9 +198,56 @@ footer {
     font-size: 15px;
   }
 
-  .container{
+  .container {
     width: 90%;
     margin: 10px auto;
   }
+}
 
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+
+@media (max-width: 700px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 1rem;
+  }
+
+  tbody tr td {
+    text-align: center;
+    position: relative;
+  }
+
+  tbody tr td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 1rem;
+    text-align: left;
+    font-weight: bold;
+  }
 }

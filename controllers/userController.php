@@ -179,7 +179,7 @@ class UserController extends Controller
                 // Actualizar contraseña solo si se proporciona un nuevo valor
                 if (!empty($_POST['password'])) {
                     $this->user->setPassword($_POST['password']);
-                } 
+                }
 
                 if (!empty($_POST['name'])) {
                     $this->user->setName($_POST['name']);
@@ -190,28 +190,50 @@ class UserController extends Controller
                 $rol = '' ? 'user' : 'user';
                 $this->user->setRole($rol);
 
-                if (!empty($_POST['photo'])) {
-                    $this->user->setPhoto($_POST['photo']);
+
+                // Manejo de la foto
+                if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                    $photo = $_FILES['photo']; // Obtiene la foto del formulario
+                    $dest_path = __DIR__ . '/../public/img/fotos-u/'; // Directorio de destino de la foto
+
+                    $extension = pathinfo($photo['name'], PATHINFO_EXTENSION); // Obtiene la extensión de la foto
+                    $filename = pathinfo($photo['name'], PATHINFO_FILENAME) . time() . '.' . $extension; // Nombre de la foto
+                    $hash = md5(date('Y-m-d H:i:s') . $filename) . '.' . $extension; // Hash para evitar duplicados
+                    $targetFile = $dest_path . $hash; // Ruta completa de la foto
+
+                    // Validar tipo de archivo
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Extensiones permitidas
+                    if (!in_array(strtolower($extension), $allowedExtensions)) {
+                        $this->redirectWithMessage('Tipo de archivo no permitido', 'user/profile', 'error');
+                        return;
+                    }
+
+                    $check = getimagesize($photo['tmp_name']); // Verifica si es una imagen
+                    if ($check === false) {
+                        $this->redirectWithMessage('El archivo no es una imagen', 'user/profile', 'error');
+                        return;
+                    }
+
+                    // Mover el archivo a la carpeta de destino
+                    if (move_uploaded_file($photo['tmp_name'], $targetFile)) { // Si se sube la imagen correctamente
+                        $this->user->setPhoto($hash); // Establecer el nombre de la foto en el objeto usuario
+                    } else {
+                        $this->redirectWithMessage('Error al subir la imagen', 'user/profile', 'error');
+                        return;
+                    }
                 } else {
+                    // Si no se proporciona una nueva imagen, mantener la existente
                     $this->user->setPhoto($existingUser->getPhoto());
                 }
 
                 // Actualizar el usuario
                 if ($this->user->updateUser()) {
-                    $this->redirectWithMessage('Usuario actualizado con éxito.', 'admin/userManagement', 'success');
+                    $this->redirectWithMessage('Perfil actualizado con éxito', 'user/profile', 'success');
                 } else {
-                    error_log('Error al actualizar el usuario');
-                    $this->redirectWithMessage('Error al actualizar el usuario.', 'admin/userManagement', 'error');
+                    $this->redirectWithMessage('Error al actualizar el perfil', 'user/profile', 'error');
                 }
             } else {
-                $this->redirectWithMessage('Usuario no encontrado.', 'admin/userManagement', 'error');
-            }
-
-
-            if ($this->user->updateUser()) {
-                $this->redirectWithMessage('Perfil actualizado con éxito', 'user/profile', 'success');
-            } else {
-                $this->redirectWithMessage('Error al actualizar el perfil', 'user/profile', 'error');
+                $this->redirectWithMessage('Usuario no encontrado.', 'user/profile', 'error');
             }
         } else {
             http_response_code(405); // Method Not Allowed
@@ -222,7 +244,8 @@ class UserController extends Controller
     public function deleteAccount()
     {
         $userId = $_SESSION['user_id'];
-        if ($this->user->deleteUser($userId)) {
+        $this->user->setId($userId);
+        if ($this->user->deleteUser()) {
             // Cerrar sesión y redirigir a la página de inicio
             session_destroy();
             $this->redirectWithMessage('Cuenta eliminada con éxito', '/', 'success');
