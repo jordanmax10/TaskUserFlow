@@ -5,7 +5,15 @@
   box-sizing: border-box;
 }
 
+html,
 body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
   background-color: #f1f1f1;
 }
 header {
@@ -26,9 +34,18 @@ ul {
   padding: 0;
   align-items: center;
 }
-a {
+header a {
   color: white;
   text-decoration: none;
+}
+
+.container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .logo {
@@ -63,6 +80,7 @@ section {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .button {
@@ -77,45 +95,155 @@ section {
 .button:hover {
   background: #0056b3;
 }
+.alert {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 5px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.delete-account {
+  color: red;
+  text-decoration: none;
+  display: block;
+  margin-top: 20px;
+}
+
+.delete-account:hover {
+  text-decoration: underline;
+}
 
 footer {
   text-align: center;
-  padding: 10px;
+  padding: 20px;
   background: #007bff;
   color: white;
-  position: relative;
-  bottom: 0;
   width: 100%;
 }
 
 @media (max-width: 700px) {
-    header {
-      flex-direction: column;
-      height: 50%;
-      text-align: center;
-    }
-  
-    .logo  a {
-      font-size: 20px;
-    }
-    h1 {
-      font-size: 20px;
-      font-weight: normal;
-    }
-  
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-    }
-  
-    .container{
-      width: 90%;
-      margin: 10px auto;
-      text-align: center;
-    }
-
-    
-      
+  header {
+    flex-direction: column;
+    text-align: center;
   }
-  
+
+  .logo a {
+    font-size: 20px;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  .container {
+    width: 90%;
+    margin: 10px auto;
+    text-align: center;
+  }
+}
+
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logo a {
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  .container {
+    width: 90%;
+    margin: 10px auto;
+  }
+}
+
+/* Estilos para la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #e0e0e0;
+}
+
+/* Estilos responsivos para la tabla */
+@media (max-width: 700px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 1rem;
+  }
+
+  tbody tr td {
+    text-align: center;
+    position: relative;
+  }
+
+  tbody tr td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 1rem;
+    text-align: left;
+    font-weight: bold;
+  }
+}

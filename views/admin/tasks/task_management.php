@@ -4,21 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Tareas</title>
-    <link rel="stylesheet" href="<?php echo constant('URL')?>/public/css/style-admin.css">
+    <link rel="stylesheet" href="<?php echo constant('URL') ?>/public/css/style-admin.css">
 </head>
 
 <body>
+    <!-- Mostrar mensajes de sesión -->
+    <?php $this->showSessionMessages(); ?>
+
     <header>
+        <a href="<?php echo constant('URL') ?>user/index" class="logo">
+            <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
+            <span>Task User Flow</span>
+        </a>
         <h1>Gestión de Tareas</h1>
         <nav>
-            <a href="/TaskUserFlow/admin">Volver al Panel</a>
-            <a href="/TaskUserFlow/logout">Cerrar Sesión</a>
+            <ul>
+                <li><a href="/TaskUserFlow/admin">Volver al Panel</a></li>
+                <li><a href="<?php echo constant('URL') ?>user/profile">Mi Perfil</a></li>
+                <li><a href="<?php echo constant('URL') ?>logout">Cerrar Sesión</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container">
         <h2>Lista de Tareas</h2>
-        <a href="/TaskUserFlow/task/create" class="button">Agregar Nueva Tarea</a>
         <table>
             <thead>
                 <tr>
@@ -26,35 +35,35 @@
                     <!-- <th>Título</th> -->
                     <th>Descripción</th>
                     <th>Estado</th>
-                    <th>ID Usuario</th>
-                    <th>Acciones</th>
+                    <th>Usuario</th>
+                    <th>Categoria</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (!empty($tasks)): ?>
                     <?php foreach ($tasks as $task): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($task->getId()); ?></td>
-                            <td><?php echo htmlspecialchars($task->getDescription()); ?></td>
-                            <td><?php echo htmlspecialchars($task->getStatus()); ?></td>
-                            <td><?php echo htmlspecialchars($task->getIdUser()); ?></td>
-                            <td>
-                                <a href="/TaskUserFlow/task/edit/<?php echo htmlspecialchars($task->getId()); ?>">Editar</a>
-                                <a href="/TaskUserFlow/task/delete/<?php echo htmlspecialchars($task->getId()); ?>">Eliminar</a>
+                            <td data-label="ID"><?php echo htmlspecialchars($task->getId()); ?></td>
+                            <td data-label="Descripción"><?php echo htmlspecialchars($task->getDescription()); ?></td>
+                            <td data-label="Estado"><?php echo htmlspecialchars($task->getStatus()); ?></td>
+                            <td data-label="Usuario"><?php echo htmlspecialchars($task->getUserName()); ?></td>
+                            <td data-label="Categoría" style="background-color: <?php echo htmlspecialchars($task->getCategoryColor()); ?>;">
+                                <?php echo htmlspecialchars($task->getCategoryName()); ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6">No hay tareas disponibles.</td>
+                        <td colspan="5">No hay tareas disponibles.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
+
         </table>
     </main>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+        <?php require_once __DIR__ . '/../../interfaces/footer.php'; ?>
     </footer>
 </body>
 

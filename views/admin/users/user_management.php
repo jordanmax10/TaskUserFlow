@@ -4,21 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Usuarios</title>
-    <link rel="stylesheet" href="<?php echo constant('URL')?>/public/css/style-admin.css">
+    <link rel="stylesheet" href="<?php echo constant('URL') ?>//public/css/style-admin.css">
 </head>
 
 <body>
+    <!-- Mostrar mensajes de sesión -->
+    <?php $this->showSessionMessages(); ?>
+
     <header>
+        <a href="<?php echo constant('URL') ?>user/index" class="logo">
+            <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
+            <span>Task User Flow</span>
+        </a>
         <h1>Gestión de Usuarios</h1>
         <nav>
-            <a href="/TaskUserFlow/admin">Volver al Panel</a>
-            <a href="/TaskUserFlow/logout">Cerrar Sesión</a>
+            <ul>
+                <li><a href="/TaskUserFlow/admin">Volver al Panel</a></li>
+                <li><a href="<?php echo constant('URL') ?>user/profile">Mi Perfil</a></li>
+                <li><a href="<?php echo constant('URL') ?>logout">Cerrar Sesión</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container">
         <h2>Lista de Usuarios</h2>
-        <a href="/TaskUserFlow/user/create" class="button">Agregar Nuevo Usuario</a>
         <table>
             <thead>
                 <tr>
@@ -53,7 +62,7 @@
     </main>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+        <?php require_once __DIR__ . '/../../interfaces/footer.php'; ?>
     </footer>
 </body>
 

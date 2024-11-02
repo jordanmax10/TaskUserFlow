@@ -11,6 +11,8 @@ class TaskModel extends Model
     private $id_user;
     private $id_category;
     private $category_name;
+    private $category_color;
+    private $user_name;
 
     private $table = 'tasks';
 
@@ -23,7 +25,9 @@ class TaskModel extends Model
         $this->comment = '';
         $this->id_user = '';
         $this->id_category = '';
-        $this->category_name = ''; // Inicializar category_name
+        $this->category_name = '';
+        $this->category_color = '';
+        $this->user_name = '';
     }
 
     // ------------------- CRUD -------------------
@@ -80,7 +84,9 @@ class TaskModel extends Model
         $this->comment = $data['comment'] ?? '';
         $this->id_user = $data['id_user'] ?? null;
         $this->id_category = $data['id_category'] ?? null;
-        $this->category_name = $data['category_name'] ?? ''; 
+        $this->category_name = $data['category_name'] ?? '';
+        $this->category_color = $data['category_color'] ?? '';
+        $this->user_name = $data['user_name'] ?? '';
 
         return $this;
     }
@@ -107,16 +113,21 @@ class TaskModel extends Model
             return $items;
         } catch (PDOException $e) {
             error_log('TaskModel::getTasksByUserId->PDOException ' . $e);
-            return []; 
+            return [];
         }
     }
 
-    public function getAllByCategoryId(int $categoryId): array
+    public function getAllTasksWithDetails(): array
     {
         $items = [];
         try {
-            $query = $this->prepare('SELECT * FROM ' . $this->table . ' WHERE id_category = :id_category');
-            $query->bindParam(':id_category', $categoryId, PDO::PARAM_INT);
+            $query = $this->prepare('
+    SELECT t.*, c.name AS category_name, c.color AS category_color, u.name AS user_name
+    FROM ' . $this->table . ' t 
+    JOIN categories c ON t.id_category = c.id 
+    JOIN users u ON t.id_user = u.id
+');
+
             $query->execute();
 
             while ($p = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -127,24 +138,11 @@ class TaskModel extends Model
 
             return $items;
         } catch (PDOException $e) {
-            error_log('TaskModel::getAllByCategoryId->PDOException ' . $e);
-            return []; // Retorna un array vacío en caso de error
+            error_log('TaskModel::getAllTasksWithDetails->PDOException ' . $e);
+            return [];
         }
     }
 
-    public function getCountByStatus(string $status): int
-    {
-        try {
-            $query = $this->prepare('SELECT COUNT(*) as total FROM ' . $this->table . ' WHERE status = :status');
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->execute();
-
-            return (int)($query->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
-        } catch (PDOException $e) {
-            error_log('TaskModel::getCountByStatus->PDOException ' . $e);
-            return 0; // Retorna 0 en caso de error
-        }
-    }
 
     // ------------------- GETTERS AND SETTERS -------------------
 
@@ -211,5 +209,16 @@ class TaskModel extends Model
     public function getCategoryName(): string
     {
         return $this->category_name; // Devuelve el nombre de la categoría
+    }
+
+    public function getCategoryColor(): string
+    {
+        return $this->category_color; // Devuelve el color de la categoría
+    }
+
+
+    public function getUserName(): string
+    {
+        return $this->user_name; // Devuelve el nombre del usuario
     }
 }

@@ -4,19 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
-    <link rel="stylesheet" href="<?php echo constant('URL') ?>/public/css/style-admin.css">
+    <link rel="stylesheet" href="<?php echo constant('URL') ?>/public/css/style.css">
+
 </head>
 
 <body>
+    <!-- Mostrar mensajes de sesión -->
+    <?php $this->showSessionMessages(); ?>
+
     <header>
-        <h1>Editar Usuario</h1>
+        <a href="<?php echo constant('URL') ?>user/index" class="logo">
+            <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
+            <span>Task User Flow</span>
+        </a>
+        <h1>Editar Usuario: <?php echo htmlspecialchars($user->getName()); ?></h1>
         <nav>
-            <a href="/TaskUserFlow/admin">Volver al Panel</a>
-            <a href="/TaskUserFlow/logout">Cerrar Sesión</a>
+            <ul>
+                <li><a href="/TaskUserFlow/admin">Volver al Panel</a></li>
+                <li><a href="<?php echo constant('URL') ?>user/profile">Mi Perfil</a></li>
+                <li><a href="<?php echo constant('URL') ?>logout">Cerrar Sesión</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container">
+        <br>
         <form action="<?php echo constant('URL') ?>admin/update" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($user->getId()); ?>">
             <label for="username">Nombre de Usuario</label>
@@ -42,11 +54,11 @@
 
             <button type="submit">Guardar Cambios</button>
         </form>
-        <a href="/TaskUserFlow/admin/users/userManagement">Cancelar</a>
+        <a href="/TaskUserFlow/admin/users/userManagement">Cancelar</a><br>
     </main>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+        <?php require_once __DIR__ . '/../../interfaces/footer.php'; ?>
     </footer>
 </body>
 

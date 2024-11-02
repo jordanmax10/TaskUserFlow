@@ -7,7 +7,7 @@ define('DB_NAME', 'db_gestion_usuarios');
 define('DB_USER', 'root');
 define('DB_PASSWORD', '');
 
-
-
+// admin
+// 12345
 
 ?>

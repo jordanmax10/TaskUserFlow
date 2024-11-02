@@ -13,7 +13,7 @@
 <!-- Mostrar mensajes de sesión -->
 <?php $this->showSessionMessages(); ?>
     <header>
-        <a href="<?php echo constant('URL') ?>admin/index" class="logo">
+        <a href="<?php echo constant('URL') ?>user/index" class="logo">
             <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
             <br><span>Task User Flow</span>
         </a>
@@ -27,8 +27,8 @@
         </nav>
     </header>
 
-    <main class="container">
-        <h2>Bienvenido, Administrador</h2>
+    <main>
+        <h2>Bienvenido Administrador : <?php echo $_SESSION['username']?></h2>
         <p>Desde aquí puedes gestionar usuarios, tareas y categorías.</p>
         <br>
         
@@ -54,7 +54,7 @@
     </main>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+        <?php require_once __DIR__ . '/../interfaces/footer.php'; ?>
     </footer>
 </body>
 

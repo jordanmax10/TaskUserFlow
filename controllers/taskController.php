@@ -62,7 +62,7 @@ class TaskController
 
     public function index()
     {
-        $tasks = $this->task->getAllTask($this->user->getId());
+        $tasks = $this->task->getAllTasks();
         $this->render('tasks/index', ['tasks' => $tasks, 'user' => $this->user]);
     }
 

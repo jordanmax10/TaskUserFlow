@@ -35,9 +35,9 @@
             <br>
             <label for="status">Estado:</label>
             <select name="status" required>
-                <option value="pending">Pendiente</option>
-                <option value="in_progress">En Progreso</option>
-                <option value="completed">Completada</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En_proceso">En Progreso</option>
+                <option value="Completada">Completada</option>
             </select>
             <br>
             <label for="comment">Comentario:</label>

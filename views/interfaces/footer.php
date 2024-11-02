@@ -1,1 +1,1 @@
-<p>&copy; <span>J-Max</span> <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+<p>&copy; <span>Jordan-Dev</span> <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>

@@ -38,9 +38,9 @@
             <label for="status">Status:</label>
             <select id="status" name="status" required>
                 <option value="">--Seleccionar--</option>
-                <option value="pending" <?php echo $task->getStatus() === 'pending' ? 'selected' : ''; ?>>Pendiente</option>
-                <option value="in_progress" <?php echo $task->getStatus() === 'in_progress' ? 'selected' : ''; ?>>En proceso</option>
-                <option value="completed" <?php echo $task->getStatus() === 'completed' ? 'selected' : ''; ?>>Completada</option>
+                <option value="Pendiente" <?php echo $task->getStatus() === 'Pendiente' ? 'selected' : ''; ?>>Pendiente</option>
+                <option value="En_Proceso" <?php echo $task->getStatus() === 'En_Proceso' ? 'selected' : ''; ?>>En proceso</option>
+                <option value="Completada" <?php echo $task->getStatus() === 'Completada' ? 'selected' : ''; ?>>Completada</option>
             </select>
 
             <label for="comment">Comentario:</label>

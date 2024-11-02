@@ -184,7 +184,7 @@ class AdminController extends Controller
             $this->redirectWithMessage('No tienes permiso para acceder a esta página.', 'user', 'error');
         }
 
-        $tasks = $this->taskModel->getAllTask(); // Método a implementar en TaskModel
+        $tasks = $this->taskModel->getAllTasksWithDetails(); // Método a implementar en TaskModel
         $this->render('admin/tasks/task_management', ['tasks' => $tasks]);
     }
 

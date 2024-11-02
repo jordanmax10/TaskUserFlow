@@ -2,9 +2,10 @@
 
 require_once __DIR__ . '/../models/categoryModel.php';
 require_once __DIR__ . '/AuthController.php';
+require_once __DIR__ . '/../libs/controller.php';
 
 
-class CategoryController 
+class CategoryController extends Controller
 {
 
     private $category;
@@ -83,14 +84,9 @@ class CategoryController
             $this->category->setColor($_POST['color']);
 
             if ($this->category->saveCategory()) {
-                header('Location: /TaskUserFlow/category');
-                exit();
+                $this->redirectWithMessage('Categoria guardada con éxito', 'admin/categoryManagement', 'success');
             } else {
-                echo "
-                <script>
-                alert('Error al guardar la categoria');
-                </script>";
-                error_log('Error al guardar la categoria');
+                $this->redirectWithMessage('Error al guardar la categoria', 'admin/categoryManagement', 'error');
             }
         }
     }
@@ -117,16 +113,9 @@ class CategoryController
 
 
             if ($this->category->updateCategory()) {
-                http_response_code(200);
-                header('Location: /TaskUserFlow/category');
-                exit();
+               $this->redirectWithMessage('Categoria actualizada con éxito', 'admin/categoryManagement', 'success');
             } else {
-                http_response_code(500); // Internal Server Error
-                echo "
-            <script>
-                alert('Error al actualizar la categoria');
-            </script>";
-                error_log('Error al actualizar la categoria');
+                $this->redirectWithMessage('Error al actualizar la categoria', 'admin/categoryManagement', 'error');
             }
         } else {
             http_response_code(405); // Method Not Allowed
@@ -143,32 +132,12 @@ class CategoryController
             return;
         }else{
             if($this->category->deleteCategory()){
-                http_response_code(200); // OK
-                header('Location: /TaskUserFlow/category');
-                exit();
+                $this->redirectWithMessage('Categoria eliminada con éxito', 'admin/categoryManagement', 'success');
             } else {
-                http_response_code(500); // Internal Server Error
-                echo "
-            <script>
-                alert('Error al eliminar la categoria');
-            </script>";
-                error_log('Error al eliminar la categoria');
+                $this->redirectWithMessage('Error al eliminar la categoria', 'admin/categoryManagement', 'error');
             }
         }
     }
 
-    private function render(string $view, array $data = [])
-    {
-
-        $filePath = __DIR__ . '/../views/' . $view . '.php';
-
-        if (file_exists($filePath)) {
-
-            extract($data);
-            require_once $filePath;
-        } else {
-            http_response_code(404);
-            echo "Pagina No Encontrada";
-        }
-    }
+    
 }

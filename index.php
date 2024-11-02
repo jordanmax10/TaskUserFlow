@@ -11,7 +11,6 @@ ini_set('error_log', 'C:\xampp\htdocs\TaskUserFlow\php-error.log');
 require_once './controllers/homeController.php';
 require_once './controllers/userController.php';
 require_once './controllers/categoryController.php';
-require_once './controllers/taskController.php';
 require_once './controllers/AuthController.php';
 require_once './controllers/AdminController.php';
 
@@ -58,16 +57,6 @@ switch ($url[0]) {
         }
         break;
 
-    case 'task':
-
-        $taskController = new TaskController();
-        if (isset($url[1])) {
-            $taskController->handleRequest($url[1]);
-        } else {
-            $taskController->handleRequest('index');
-        }
-
-        break;
 
     default:
         http_response_code(404);

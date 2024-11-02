@@ -4,20 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Categorías</title>
-    <link rel="stylesheet" href="<?php echo constant('URL')?>/public/css/style-admin.css">
+    <link rel="stylesheet" href="<?php echo constant('URL') ?>/public/css/style-admin.css">
 </head>
 
 <body>
+    <!-- Mostrar mensajes de sesión -->
+    <?php $this->showSessionMessages(); ?>
+
     <header>
-        <h1>Gestión de Categorías</h1>
+        <a href="<?php echo constant('URL') ?>user/index" class="logo">
+            <img src="<?php echo constant('URL') ?>/public/img/gestion.png" alt="Img-gestion">
+            <span>Task User Flow</span>
+        </a>
+        <h1>Gestión de Categorias</h1>
         <nav>
-            <a href="/TaskUserFlow/admin">Volver al Panel</a>
-            <a href="/TaskUserFlow/logout">Cerrar Sesión</a>
+            <ul>
+                <li><a href="/TaskUserFlow/admin">Volver al Panel</a></li>
+                <li><a href="<?php echo constant('URL') ?>user/profile">Mi Perfil</a></li>
+                <li><a href="<?php echo constant('URL') ?>logout">Cerrar Sesión</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container">
         <h2>Lista de Categorías</h2>
+        <br>
         <a href="/TaskUserFlow/category/create" class="button">Agregar Nueva Categoría</a>
         <table>
             <thead>
@@ -51,7 +62,7 @@
     </main>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Tu Aplicación de Tareas</p>
+        <?php require_once __DIR__ . '/../../interfaces/footer.php'; ?>
     </footer>
 </body>
 

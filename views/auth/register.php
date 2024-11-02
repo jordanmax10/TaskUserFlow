@@ -16,17 +16,17 @@
     <div class="container">
         <h1>Register User</h1>
         <form action="<?= constant('URL') ?>register" method="POST" enctype="multipart/form-data">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" required>
+        <label for="username">Username</label>
+            <input type="text" name="username" id="username" required pattern="[a-zA-Z0-9_]+" title="El nombre de usuario solo puede contener letras, números y guiones bajos.">
             <br>
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" required>
+            <input type="password" name="password" id="password" required minlength="6" title="La contraseña debe tener al menos 6 caracteres.">
             <br>
             <label for="name">Name</label>
             <input type="text" name="name" id="name" required>
             <br>
             <label for="photo">Photo</label>
-            <input type="file" name="photo" >
+            <input type="file" name="photo" id="photo" accept="image/*">
             <br>
             <button type="submit">Register</button>
         </form>
