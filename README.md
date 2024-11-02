@@ -19,4 +19,4 @@ El principio DRY establece que cada pieza de conocimiento en un sistema debe ten
 
 1. Clona el repositorio:
    ```bash
-   git clone <URL_DEL_REPOSITORIO>
+   git clone https://github.com/jordanmax10/TaskUserFlow.git
